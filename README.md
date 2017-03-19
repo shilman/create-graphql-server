@@ -27,7 +27,7 @@ To see what a complete generated server looks like, see the `test/output-app` fo
 
 This example is a super simple Twitter clone, with users and tweets, but if you want to experiment, you can add and remove types and fields as you wish.
 
-For example, in `user.graphql`:
+For example, in `User.graphql`:
 
 ```graphql
 type User {
@@ -43,6 +43,11 @@ type User {
 ```
 
 The directives used control the code generation (see below).
+
+### Directives
+
+- `@unmodifiable` - the field will not appear in the update mutation
+- `@enum` - the field's type is an enum, and can be set directly (not just by `Id`).
 
 ### Relations
 
@@ -65,15 +70,22 @@ If the field references an array (again w/ or w/o nullability) of another type, 
 
 ## Development
 
-### Running end-to-end tests
-
-You can run a set of end-to-end tests of the user/tweet app with `npm run end-to-end-test`. This will seed the database, and run against a running server.
-
-You need to start the standard server with `npm start`, then run `npm run end-to-end-test`.
-
 ### Running code generation tests
 
 You can run some basic code generation tests with `npm test`.
+
+### Testing full app code generation
+
+A simple test to check that using the `test/input` input files with the CGS scripts generates `test/output-app` can be run with `npm run output-app-generation-test`.
+
+### Running end-to-end tests
+
+You can run a set of end-to-end tests of the user/tweet app (which lives in `test/output-app`) with `npm run end-to-end-test`. This will seed the database, and run against a running server.
+
+The test files are in `test/output-app-end-to-end`.
+
+You need to start the standard server with `cd test/output-app; npm start`, then run `npm run end-to-end-test`.
+
 
 ### Creating seed database
 
@@ -81,6 +93,6 @@ If you need to change the fixtures for the test db
 
 Start the server, then run
 ```bash
-mongoexport --host 127.0.0.1:3002 --db database --collection user > seeds/user.json
-mongoexport --host 127.0.0.1:3002 --db database --collection tweet > seeds/tweet.json
+mongoexport --host 127.0.0.1:3002 --db database --collection user > seeds/User.json
+mongoexport --host 127.0.0.1:3002 --db database --collection tweet > seeds/Tweet.json
 ```
